@@ -60,56 +60,58 @@ class ProjectsSection extends StatelessWidget {
   }
 
   Widget _buildDesktopLayout(PortfolioController controller) {
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        crossAxisSpacing: 30,
-        mainAxisSpacing: 30,
-        childAspectRatio: 0.75,
-      ),
-      itemCount: controller.projects.length,
-      itemBuilder: (context, index) {
-        final project = controller.projects[index];
-        return FadeInUp(
-          duration: Duration(milliseconds: 800 + (index * 100)),
-          child: ProjectCard(
-            title: project.title,
-            description: project.description,
-            technologies: project.technologies,
-            imageUrl: project.imageUrl,
-            githubUrl: project.githubUrl,
-            liveUrl: project.liveUrl,
-          ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final cardWidth = (constraints.maxWidth - 60) / 3;
+        return Wrap(
+          spacing: 30,
+          runSpacing: 30,
+          children: List.generate(controller.projects.length, (index) {
+            final project = controller.projects[index];
+            return FadeInUp(
+              duration: Duration(milliseconds: 800 + (index * 100)),
+              child: SizedBox(
+                width: cardWidth,
+                child: ProjectCard(
+                  title: project.title,
+                  description: project.description,
+                  technologies: project.technologies,
+                  imageUrl: project.imageUrl,
+                  githubUrl: project.githubUrl,
+                  liveUrl: project.liveUrl,
+                ),
+              ),
+            );
+          }),
         );
       },
     );
   }
 
   Widget _buildTabletLayout(PortfolioController controller) {
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 24,
-        mainAxisSpacing: 24,
-        childAspectRatio: 0.75,
-      ),
-      itemCount: controller.projects.length,
-      itemBuilder: (context, index) {
-        final project = controller.projects[index];
-        return FadeInUp(
-          duration: Duration(milliseconds: 800 + (index * 100)),
-          child: ProjectCard(
-            title: project.title,
-            description: project.description,
-            technologies: project.technologies,
-            imageUrl: project.imageUrl,
-            githubUrl: project.githubUrl,
-            liveUrl: project.liveUrl,
-          ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final cardWidth = (constraints.maxWidth - 24) / 2;
+        return Wrap(
+          spacing: 24,
+          runSpacing: 24,
+          children: List.generate(controller.projects.length, (index) {
+            final project = controller.projects[index];
+            return FadeInUp(
+              duration: Duration(milliseconds: 800 + (index * 100)),
+              child: SizedBox(
+                width: cardWidth,
+                child: ProjectCard(
+                  title: project.title,
+                  description: project.description,
+                  technologies: project.technologies,
+                  imageUrl: project.imageUrl,
+                  githubUrl: project.githubUrl,
+                  liveUrl: project.liveUrl,
+                ),
+              ),
+            );
+          }),
         );
       },
     );
