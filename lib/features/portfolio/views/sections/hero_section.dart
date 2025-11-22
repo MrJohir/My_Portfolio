@@ -529,7 +529,7 @@ class _AnimatedFloatingImageState extends State<_AnimatedFloatingImage>
                           'assets/images/profile.jpg',
                           width: size,
                           height: size,
-                          fit: BoxFit.cover,
+                          fit: BoxFit.contain,
                           errorBuilder: (context, error, stackTrace) =>
                               Container(
                                 decoration: BoxDecoration(
