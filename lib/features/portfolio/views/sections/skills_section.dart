@@ -70,21 +70,22 @@ class SkillsSection extends StatelessWidget {
   }
 
   Widget _buildDesktopLayout() {
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 40,
-        mainAxisSpacing: 40,
-        childAspectRatio: 2.8,
-      ),
-      itemCount: _skillsData.length,
-      itemBuilder: (context, index) {
-        final entry = _skillsData.entries.elementAt(index);
-        return FadeInUp(
-          duration: Duration(milliseconds: 800 + (index * 100)),
-          child: SkillCategory(title: entry.key, skills: entry.value),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final cardWidth = (constraints.maxWidth - 40) / 2;
+        return Wrap(
+          spacing: 40,
+          runSpacing: 40,
+          children: _skillsData.entries.map((entry) {
+            final index = _skillsData.entries.toList().indexOf(entry);
+            return FadeInUp(
+              duration: Duration(milliseconds: 800 + (index * 100)),
+              child: SizedBox(
+                width: cardWidth,
+                child: SkillCategory(title: entry.key, skills: entry.value),
+              ),
+            );
+          }).toList(),
         );
       },
     );

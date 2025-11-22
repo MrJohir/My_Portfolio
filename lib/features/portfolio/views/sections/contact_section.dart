@@ -93,73 +93,82 @@ class ContactSection extends StatelessWidget {
   }
 
   Widget _buildContactForm(PortfolioController controller) {
-    return Container(
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.shadow,
-            blurRadius: 20,
-            offset: const Offset(0, 10),
-          ),
-        ],
-      ),
-      child: Form(
-        key: controller.formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(AppStrings.contactFormTitle, style: AppTextStyles.heading3),
-            const SizedBox(height: 24),
-            CustomTextField(
-              controller: controller.nameController,
-              label: AppStrings.nameLabel,
-              hint: AppStrings.nameHint,
-              prefixIcon: Icons.person_outline,
-              validator: (value) => AppValidator.validateFullName(value),
-            ),
-            const SizedBox(height: 16),
-            CustomTextField(
-              controller: controller.emailController,
-              label: AppStrings.emailLabel,
-              hint: AppStrings.emailHint,
-              prefixIcon: Icons.email_outlined,
-              keyboardType: TextInputType.emailAddress,
-              validator: (value) => AppValidator.validateEmail(value),
-            ),
-            const SizedBox(height: 16),
-            CustomTextField(
-              controller: controller.messageController,
-              label: AppStrings.messageLabel,
-              hint: AppStrings.messageHint,
-              prefixIcon: Icons.message_outlined,
-              maxLines: 4,
-              validator: (value) => AppValidator.validateMessage(value),
-            ),
-            const SizedBox(height: 24),
-            Obx(
-              () => SizedBox(
-                width: double.infinity,
-                child: CustomButton(
-                  text: AppStrings.sendButton,
-                  onPressed: controller.isSubmitting.value
-                      ? null
-                      : controller.submitContactForm,
-                  isLoading: controller.isSubmitting.value,
-                  icon: Icons.send,
-                ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Container(
+          padding: EdgeInsets.all(constraints.maxWidth < 600 ? 16 : 24),
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.shadow,
+                blurRadius: 20,
+                offset: const Offset(0, 10),
               ),
+            ],
+          ),
+          child: Form(
+            key: controller.formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  AppStrings.contactFormTitle,
+                  style: AppTextStyles.heading3,
+                ),
+                const SizedBox(height: 24),
+                CustomTextField(
+                  controller: controller.nameController,
+                  label: AppStrings.nameLabel,
+                  hint: AppStrings.nameHint,
+                  prefixIcon: Icons.person_outline,
+                  validator: (value) => AppValidator.validateFullName(value),
+                ),
+                const SizedBox(height: 16),
+                CustomTextField(
+                  controller: controller.emailController,
+                  label: AppStrings.emailLabel,
+                  hint: AppStrings.emailHint,
+                  prefixIcon: Icons.email_outlined,
+                  keyboardType: TextInputType.emailAddress,
+                  validator: (value) => AppValidator.validateEmail(value),
+                ),
+                const SizedBox(height: 16),
+                CustomTextField(
+                  controller: controller.messageController,
+                  label: AppStrings.messageLabel,
+                  hint: AppStrings.messageHint,
+                  prefixIcon: Icons.message_outlined,
+                  maxLines: 4,
+                  validator: (value) => AppValidator.validateMessage(value),
+                ),
+                const SizedBox(height: 24),
+                Obx(
+                  () => SizedBox(
+                    width: double.infinity,
+                    child: CustomButton(
+                      text: AppStrings.sendButton,
+                      onPressed: controller.isSubmitting.value
+                          ? null
+                          : controller.submitContactForm,
+                      isLoading: controller.isSubmitting.value,
+                      icon: Icons.send,
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
   Widget _buildContactInfo(PortfolioController controller) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         _buildContactInfoCard(
           icon: Icons.email_outlined,
@@ -167,21 +176,21 @@ class ContactSection extends StatelessWidget {
           subtitle: AppStrings.email,
           onTap: () => controller.openEmail(),
         ),
-        const SizedBox(height: 24),
+        const SizedBox(height: 16),
         _buildContactInfoCard(
           icon: Icons.phone_outlined,
           title: AppStrings.callMe,
           subtitle: AppStrings.phone,
           onTap: () => controller.makePhoneCall(),
         ),
-        const SizedBox(height: 24),
+        const SizedBox(height: 16),
         _buildContactInfoCard(
           icon: Icons.location_on_outlined,
           title: 'Location',
           subtitle: AppStrings.location,
           onTap: null,
         ),
-        const SizedBox(height: 32),
+        const SizedBox(height: 24),
         _buildSocialLinks(controller),
       ],
     );
@@ -193,51 +202,67 @@ class ContactSection extends StatelessWidget {
     required String subtitle,
     VoidCallback? onTap,
   }) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
-      child: Container(
-        padding: const EdgeInsets.all(24),
-        decoration: BoxDecoration(
-          color: AppColors.surface,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isSmallScreen = constraints.maxWidth < 400;
+        return InkWell(
+          onTap: onTap,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.border),
-        ),
-        child: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: AppColors.primary.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Icon(icon, color: AppColors.primary, size: 28),
+          child: Container(
+            padding: EdgeInsets.all(isSmallScreen ? 16 : 20),
+            decoration: BoxDecoration(
+              color: AppColors.surface,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: AppColors.border),
             ),
-            const SizedBox(width: 20),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(title, style: AppTextStyles.bodySmall),
-                  const SizedBox(height: 4),
-                  Text(
-                    subtitle,
-                    style: AppTextStyles.bodyMedium.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: EdgeInsets.all(isSmallScreen ? 12 : 16),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                ],
-              ),
+                  child: Icon(
+                    icon,
+                    color: AppColors.primary,
+                    size: isSmallScreen ? 24 : 28,
+                  ),
+                ),
+                SizedBox(width: isSmallScreen ? 12 : 20),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        title,
+                        style: AppTextStyles.bodySmall,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        subtitle,
+                        style: AppTextStyles.bodyMedium.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ),
+                if (onTap != null)
+                  Icon(
+                    Icons.arrow_forward_ios,
+                    color: AppColors.textSecondary,
+                    size: 16,
+                  ),
+              ],
             ),
-            if (onTap != null)
-              Icon(
-                Icons.arrow_forward_ios,
-                color: AppColors.textSecondary,
-                size: 16,
-              ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 

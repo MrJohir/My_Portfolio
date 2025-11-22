@@ -7,6 +7,7 @@ import 'package:flutter_application_1/core/common/widgets/section_title.dart';
 import 'package:flutter_application_1/core/common/widgets/responsive_widget.dart';
 
 /// About section with bio and professional info
+/// Features gradient cards and smooth animations
 class AboutSection extends StatelessWidget {
   const AboutSection({super.key});
 
@@ -14,15 +15,26 @@ class AboutSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      color: AppColors.surface,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.surface, AppColors.background],
+        ),
+      ),
       padding: ResponsivePadding.all(context),
       child: Column(
         children: [
           FadeInUp(
             duration: const Duration(milliseconds: 800),
-            child: const SectionTitle(
-              title: AppStrings.aboutTitle,
-              subtitle: AppStrings.aboutSubtitle,
+            child: ShaderMask(
+              shaderCallback: (bounds) => LinearGradient(
+                colors: AppColors.aboutGradient,
+              ).createShader(bounds),
+              child: const SectionTitle(
+                title: AppStrings.aboutTitle,
+                subtitle: AppStrings.aboutSubtitle,
+              ),
             ),
           ),
           const SizedBox(height: 60),
@@ -90,43 +102,62 @@ class AboutSection extends StatelessWidget {
 
   Widget _buildStats() {
     return Container(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(32),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            AppColors.primary.withValues(alpha: 0.1),
-            AppColors.accent.withValues(alpha: 0.1),
-          ],
+          colors: AppColors.aboutGradient,
         ),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.primary.withValues(alpha: 0.2)),
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.aboutGradient[0].withValues(alpha: 0.3),
+            blurRadius: 30,
+            offset: const Offset(0, 15),
+          ),
+        ],
       ),
       child: Column(
         children: [
-          _buildStatItem(
-            icon: Icons.school,
-            label: 'Education',
-            value: 'Computer Science',
+          ZoomIn(
+            duration: const Duration(milliseconds: 600),
+            delay: const Duration(milliseconds: 200),
+            child: _buildStatItem(
+              icon: Icons.school,
+              label: 'Education',
+              value: 'Computer Science',
+            ),
           ),
-          const SizedBox(height: 20),
-          _buildStatItem(
-            icon: Icons.location_on,
-            label: 'Location',
-            value: AppStrings.location,
+          const SizedBox(height: 24),
+          ZoomIn(
+            duration: const Duration(milliseconds: 600),
+            delay: const Duration(milliseconds: 400),
+            child: _buildStatItem(
+              icon: Icons.location_on,
+              label: 'Location',
+              value: AppStrings.location,
+            ),
           ),
-          const SizedBox(height: 20),
-          _buildStatItem(
-            icon: Icons.code,
-            label: 'Specialization',
-            value: 'Flutter Development',
+          const SizedBox(height: 24),
+          ZoomIn(
+            duration: const Duration(milliseconds: 600),
+            delay: const Duration(milliseconds: 600),
+            child: _buildStatItem(
+              icon: Icons.code,
+              label: 'Specialization',
+              value: 'Flutter Development',
+            ),
           ),
-          const SizedBox(height: 20),
-          _buildStatItem(
-            icon: Icons.emoji_events,
-            label: 'Focus',
-            value: 'Mobile Apps & UI/UX',
+          const SizedBox(height: 24),
+          ZoomIn(
+            duration: const Duration(milliseconds: 600),
+            delay: const Duration(milliseconds: 800),
+            child: _buildStatItem(
+              icon: Icons.emoji_events,
+              label: 'Focus',
+              value: 'Mobile Apps & UI/UX',
+            ),
           ),
         ],
       ),
@@ -138,38 +169,50 @@ class AboutSection extends StatelessWidget {
     required String label,
     required String value,
   }) {
-    return Row(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: AppColors.primary.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Icon(icon, color: AppColors.primary, size: 28),
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: Colors.white.withValues(alpha: 0.2),
+          width: 1,
         ),
-        const SizedBox(width: 16),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                label,
-                style: AppTextStyles.caption.copyWith(
-                  color: AppColors.textSecondary,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                value,
-                style: AppTextStyles.bodyMedium.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.2),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(icon, color: Colors.white, size: 28),
           ),
-        ),
-      ],
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label,
+                  style: AppTextStyles.caption.copyWith(
+                    color: Colors.white.withValues(alpha: 0.8),
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  value,
+                  style: AppTextStyles.bodyMedium.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

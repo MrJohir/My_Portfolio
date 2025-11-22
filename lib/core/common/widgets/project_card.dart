@@ -3,7 +3,7 @@ import 'package:flutter_application_1/core/utils/constants/app_colors.dart';
 import 'package:flutter_application_1/core/utils/constants/app_text_styles.dart';
 
 /// Project card widget for displaying project information
-/// Includes image, title, description, and action buttons
+/// Features gradient overlay, hover animations, and smooth transitions
 class ProjectCard extends StatefulWidget {
   const ProjectCard({
     super.key,
@@ -26,145 +26,280 @@ class ProjectCard extends StatefulWidget {
   State<ProjectCard> createState() => _ProjectCardState();
 }
 
-class _ProjectCardState extends State<ProjectCard> {
+class _ProjectCardState extends State<ProjectCard>
+    with SingleTickerProviderStateMixin {
   bool _isHovered = false;
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+  late Animation<double> _fadeAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+
+    _scaleAnimation = Tween<double>(
+      begin: 1.0,
+      end: 1.05,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
+
+    _fadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _onHoverStart() {
+    setState(() => _isHovered = true);
+    _controller.forward();
+  }
+
+  void _onHoverEnd() {
+    setState(() => _isHovered = false);
+    _controller.reverse();
+  }
 
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 300),
-        transform: Matrix4.identity()..scale(_isHovered ? 1.03 : 1.0),
-        child: Card(
-          elevation: _isHovered ? 12 : 4,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          clipBehavior: Clip.antiAlias,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Project Image
-              Container(
-                height: 180,
-                width: double.infinity,
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [AppColors.gradientStart, AppColors.gradientEnd],
-                  ),
+      onEnter: (_) => _onHoverStart(),
+      onExit: (_) => _onHoverEnd(),
+      child: AnimatedBuilder(
+        animation: _controller,
+        builder: (context, child) {
+          return Transform.scale(
+            scale: _scaleAnimation.value,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                gradient: LinearGradient(
+                  colors: AppColors.projectsGradient,
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
                 ),
-                child: widget.imageUrl != null
-                    ? Image.network(
-                        widget.imageUrl!,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) =>
-                            _buildPlaceholder(),
-                      )
-                    : _buildPlaceholder(),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.projectsGradient[0].withValues(
+                      alpha: _isHovered ? 0.4 : 0.2,
+                    ),
+                    blurRadius: _isHovered ? 30 : 15,
+                    offset: Offset(0, _isHovered ? 15 : 8),
+                  ),
+                ],
               ),
-              // Project Content
-              Padding(
-                padding: const EdgeInsets.all(16),
+              child: Card(
+                elevation: 0,
+                margin: const EdgeInsets.all(2),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18),
+                ),
+                clipBehavior: Clip.antiAlias,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
-                      widget.title,
-                      style: AppTextStyles.heading4.copyWith(fontSize: 18),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      widget.description,
-                      style: AppTextStyles.bodySmall.copyWith(fontSize: 13),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 12),
-                    // Technologies
-                    Wrap(
-                      spacing: 6,
-                      runSpacing: 6,
-                      children: widget.technologies
-                          .take(3)
-                          .map(
-                            (tech) => Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 5,
-                              ),
-                              decoration: BoxDecoration(
-                                color: AppColors.primary.withValues(alpha: 0.1),
-                                borderRadius: BorderRadius.circular(16),
-                                border: Border.all(
-                                  color: AppColors.primary.withValues(
-                                    alpha: 0.3,
-                                  ),
-                                ),
-                              ),
-                              child: Text(
-                                tech,
-                                style: AppTextStyles.caption.copyWith(
-                                  color: AppColors.primary,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 11,
-                                ),
-                              ),
-                            ),
-                          )
-                          .toList(),
-                    ),
-                    const SizedBox(height: 12),
-                    // Action Buttons
-                    Row(
+                    // Project Image with overlay
+                    Stack(
                       children: [
-                        if (widget.githubUrl != null)
-                          Expanded(
-                            child: OutlinedButton.icon(
-                              onPressed: () {
-                                // Open GitHub URL
-                              },
-                              icon: const Icon(Icons.code, size: 16),
-                              label: const Text(
-                                'Code',
-                                style: TextStyle(fontSize: 13),
-                              ),
-                              style: OutlinedButton.styleFrom(
-                                foregroundColor: AppColors.primary,
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 10,
-                                ),
+                        Container(
+                          height: 200,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: AppColors.projectsGradient,
+                            ),
+                          ),
+                          child: widget.imageUrl != null
+                              ? Image.network(
+                                  widget.imageUrl!,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) =>
+                                      _buildPlaceholder(),
+                                )
+                              : _buildPlaceholder(),
+                        ),
+                        // Gradient overlay on hover
+                        AnimatedOpacity(
+                          opacity: _fadeAnimation.value * 0.7,
+                          duration: const Duration(milliseconds: 300),
+                          child: Container(
+                            height: 200,
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: AppColors.cardHoverGradient,
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
                               ),
                             ),
                           ),
-                        if (widget.githubUrl != null && widget.liveUrl != null)
-                          const SizedBox(width: 8),
-                        if (widget.liveUrl != null)
-                          Expanded(
-                            child: ElevatedButton.icon(
-                              onPressed: () {
-                                // Open Live URL
-                              },
-                              icon: const Icon(Icons.launch, size: 16),
-                              label: const Text(
-                                'Demo',
-                                style: TextStyle(fontSize: 13),
-                              ),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColors.primary,
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 10,
-                                ),
-                              ),
-                            ),
-                          ),
+                        ),
                       ],
                     ),
+                    // Project Content
+                    Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            widget.title,
+                            style: AppTextStyles.heading4.copyWith(
+                              fontSize: 20,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            widget.description,
+                            style: AppTextStyles.bodySmall.copyWith(
+                              fontSize: 14,
+                              color: AppColors.textSecondary,
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 16),
+                          // Technologies with gradient
+                          Wrap(
+                            spacing: 8,
+                            runSpacing: 8,
+                            children: widget.technologies
+                                .take(3)
+                                .map(
+                                  (tech) => Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 12,
+                                      vertical: 6,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        colors: AppColors.projectsGradient,
+                                      ),
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: Text(
+                                      tech,
+                                      style: AppTextStyles.caption.copyWith(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                                .toList(),
+                          ),
+                          const SizedBox(height: 16),
+                          // Action Buttons with gradient
+                          Row(
+                            children: [
+                              if (widget.githubUrl != null)
+                                Expanded(
+                                  child: _buildGradientButton(
+                                    icon: Icons.code,
+                                    label: 'Code',
+                                    isOutlined: true,
+                                  ),
+                                ),
+                              if (widget.githubUrl != null &&
+                                  widget.liveUrl != null)
+                                const SizedBox(width: 12),
+                              if (widget.liveUrl != null)
+                                Expanded(
+                                  child: _buildGradientButton(
+                                    icon: Icons.launch,
+                                    label: 'Demo',
+                                    isOutlined: false,
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildGradientButton({
+    required IconData icon,
+    required String label,
+    required bool isOutlined,
+  }) {
+    if (isOutlined) {
+      return Container(
+        decoration: BoxDecoration(
+          border: Border.all(width: 2, color: AppColors.primary),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: InkWell(
+          onTap: () {},
+          borderRadius: BorderRadius.circular(8),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(icon, size: 18, color: AppColors.primary),
+                const SizedBox(width: 6),
+                Flexible(
+                  child: Text(
+                    label,
+                    style: AppTextStyles.button.copyWith(
+                      fontSize: 14,
+                      color: AppColors.primary,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(colors: AppColors.projectsGradient),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: InkWell(
+        onTap: () {},
+        borderRadius: BorderRadius.circular(8),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(icon, size: 18, color: Colors.white),
+              const SizedBox(width: 6),
+              Flexible(
+                child: Text(
+                  label,
+                  style: AppTextStyles.button.copyWith(
+                    fontSize: 14,
+                    color: Colors.white,
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ],
@@ -179,7 +314,7 @@ class _ProjectCardState extends State<ProjectCard> {
       child: Icon(
         Icons.folder_open,
         size: 64,
-        color: AppColors.textOnPrimary.withValues(alpha: 0.7),
+        color: Colors.white.withValues(alpha: 0.7),
       ),
     );
   }
