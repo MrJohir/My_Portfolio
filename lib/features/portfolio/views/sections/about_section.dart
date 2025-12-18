@@ -124,15 +124,25 @@ class AboutSection extends StatelessWidget {
             duration: const Duration(milliseconds: 600),
             delay: const Duration(milliseconds: 200),
             child: _buildStatItem(
-              icon: Icons.school,
-              label: 'Education',
-              value: 'Computer Science',
+              icon: Icons.emoji_events,
+              label: 'Current Role',
+              value: 'Team Lead',
             ),
           ),
           const SizedBox(height: 24),
           ZoomIn(
             duration: const Duration(milliseconds: 600),
             delay: const Duration(milliseconds: 400),
+            child: _buildStatItem(
+              icon: Icons.business,
+              label: 'Company',
+              value: 'Softvency IT Limited',
+            ),
+          ),
+          const SizedBox(height: 24),
+          ZoomIn(
+            duration: const Duration(milliseconds: 600),
+            delay: const Duration(milliseconds: 600),
             child: _buildStatItem(
               icon: Icons.location_on,
               label: 'Location',
@@ -142,21 +152,11 @@ class AboutSection extends StatelessWidget {
           const SizedBox(height: 24),
           ZoomIn(
             duration: const Duration(milliseconds: 600),
-            delay: const Duration(milliseconds: 600),
-            child: _buildStatItem(
-              icon: Icons.code,
-              label: 'Specialization',
-              value: 'Flutter Development',
-            ),
-          ),
-          const SizedBox(height: 24),
-          ZoomIn(
-            duration: const Duration(milliseconds: 600),
             delay: const Duration(milliseconds: 800),
             child: _buildStatItem(
-              icon: Icons.emoji_events,
-              label: 'Focus',
-              value: 'Mobile Apps & UI/UX',
+              icon: Icons.school,
+              label: 'Education',
+              value: 'BSc in CSE',
             ),
           ),
         ],

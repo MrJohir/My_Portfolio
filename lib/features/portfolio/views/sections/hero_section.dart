@@ -20,8 +20,8 @@ class HeroSection extends StatelessWidget {
     final screenHeight = MediaQuery.of(context).size.height;
     final minHeight = screenHeight < 600 ? 600.0 : screenHeight * 0.9;
 
-    return SizedBox(
-      height: minHeight,
+    return Container(
+      constraints: BoxConstraints(minHeight: minHeight),
       child: Stack(
         children: [
           // Animated gradient background
@@ -29,17 +29,14 @@ class HeroSection extends StatelessWidget {
           // Floating particles
           const Positioned.fill(child: FloatingParticles()),
           // Main content
-          SingleChildScrollView(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(minHeight: minHeight),
-              child: Container(
-                width: double.infinity,
-                padding: ResponsivePadding.all(context),
-                child: ResponsiveWidget(
-                  mobile: _buildMobileLayout(context, controller),
-                  tablet: _buildTabletLayout(context, controller),
-                  desktop: _buildDesktopLayout(context, controller),
-                ),
+          Center(
+            child: Container(
+              width: double.infinity,
+              padding: ResponsivePadding.all(context),
+              child: ResponsiveWidget(
+                mobile: _buildMobileLayout(context, controller),
+                tablet: _buildTabletLayout(context, controller),
+                desktop: _buildDesktopLayout(context, controller),
               ),
             ),
           ),
@@ -176,31 +173,19 @@ class HeroSection extends StatelessWidget {
               child: AnimatedTextKit(
                 animatedTexts: [
                   TypewriterAnimatedText(
-                    AppStrings.profession,
-                    speed: const Duration(milliseconds: 100),
-                    textStyle: AppTextStyles.heading2.copyWith(
-                      fontSize: isMobile ? 20 : 28,
-                      fontWeight: FontWeight.bold,
-                      foreground: Paint()
-                        ..shader = LinearGradient(
-                          colors: AppColors.heroGradient,
-                        ).createShader(const Rect.fromLTWH(0, 0, 500, 40)),
-                    ),
-                  ),
-                  TypewriterAnimatedText(
-                    'Flutter Developer',
-                    speed: const Duration(milliseconds: 100),
-                    textStyle: AppTextStyles.heading2.copyWith(
-                      fontSize: isMobile ? 20 : 28,
-                      fontWeight: FontWeight.bold,
-                      foreground: Paint()
-                        ..shader = LinearGradient(
-                          colors: AppColors.heroGradient,
-                        ).createShader(const Rect.fromLTWH(0, 0, 500, 40)),
-                    ),
-                  ),
-                  TypewriterAnimatedText(
                     'Mobile App Developer',
+                    speed: const Duration(milliseconds: 100),
+                    textStyle: AppTextStyles.heading2.copyWith(
+                      fontSize: isMobile ? 20 : 28,
+                      fontWeight: FontWeight.bold,
+                      foreground: Paint()
+                        ..shader = LinearGradient(
+                          colors: AppColors.heroGradient,
+                        ).createShader(const Rect.fromLTWH(0, 0, 500, 40)),
+                    ),
+                  ),
+                  TypewriterAnimatedText(
+                    'Flutter Developer | Team Lead',
                     speed: const Duration(milliseconds: 100),
                     textStyle: AppTextStyles.heading2.copyWith(
                       fontSize: isMobile ? 20 : 28,
@@ -385,7 +370,7 @@ class HeroSection extends StatelessWidget {
         onTap: onPressed,
         child: Container(
           height: isMobile ? 48 : 56,
-          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 18),
           decoration: BoxDecoration(
             border: Border.all(width: 2, color: AppColors.primary),
             borderRadius: BorderRadius.circular(30),

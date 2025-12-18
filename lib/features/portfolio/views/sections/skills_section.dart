@@ -10,32 +10,74 @@ import 'package:flutter_application_1/core/common/widgets/responsive_widget.dart
 class SkillsSection extends StatelessWidget {
   const SkillsSection({super.key});
 
-  // Skills data organized by category
+  // Skills data organized by category from CV
   static const Map<String, List<String>> _skillsData = {
     'Framework & Languages': [
-      'Flutter',
-      'Dart',
-      'Kotlin',
+      'Flutter SDK',
+      'Dart (OOP)',
       'Java',
-      'Swift',
+      'C',
+      'C++',
       'JavaScript',
     ],
-    'Backend & Database': [
-      'Firebase',
-      'REST API',
-      'SQLite',
-      'Hive',
-      'Cloud Firestore',
-      'MySQL',
+    'State Management': ['GetX', 'BLoC', 'Provider', 'Riverpod'],
+    'Backend & APIs': [
+      'REST APIs',
+      'Firebase Services',
+      'Complex JSON Handling',
+      'API Integration',
+      'Cloud Functions',
     ],
-    'State Management': ['GetX', 'Provider', 'BLoC', 'Riverpod'],
-    'Tools & Others': [
-      'Git & GitHub',
-      'VS Code',
+    'Real-Time Systems': [
+      'WebSockets',
+      'Socket.IO (Chat)',
+      'Agora (Audio/Video Call)',
+      'Live Updates',
+    ],
+    'Local Storage': [
+      'Hive',
+      'Secure Storage',
+      'Shared Preferences',
+      'Get Storage',
+    ],
+    'Authentication': [
+      'Firebase Auth',
+      'Google Login',
+      'Facebook Login',
+      'JWT Tokens',
+    ],
+    'Payment Integration': [
+      'Stripe',
+      'SSLCommerz',
+      'Payment Gateways',
+      'Secure Transactions',
+    ],
+    'Maps & Location': [
+      'Google Maps SDK',
+      'Geolocator',
+      'Location Services',
+      'Geofencing',
+    ],
+    'AI & Smart Features': [
+      'AI API Integration',
+      'AI Coach',
+      'Recommendation Logic',
+      'Smart Assistants',
+    ],
+    'Tools & Platforms': [
       'Android Studio',
+      'VS Code',
       'Xcode',
-      'Figma',
+      'Git & GitHub',
       'Postman',
+      'Figma',
+    ],
+    'App Deployment': [
+      'Play Store Publishing',
+      'App Store Publishing',
+      'App Signing',
+      'Version Management',
+      'Store Compliance',
     ],
   };
 

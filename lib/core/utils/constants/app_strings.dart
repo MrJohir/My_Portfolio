@@ -10,11 +10,12 @@ class AppStrings {
   // Personal Info
   static const String fullName = 'Md. Johirul Islam';
   static const String shortName = 'Johirul Islam';
-  static const String profession = 'Flutter Developer';
+  static const String profession =
+      'Flutter Developer | Team Lead | Mobile Application Specialist';
   static const String email = 'mdjohiruli826@gmail.com';
   static const String phone = '+880 1751228824';
   static const String phoneRaw = '01751228824';
-  static const String location = 'Bangladesh';
+  static const String location = 'Dhaka, Bangladesh';
 
   // Social Links
   static const String linkedinUrl =
@@ -33,9 +34,9 @@ class AppStrings {
   // Home Section
   static const String heroGreeting = 'Hi, I\'m';
   static const String heroSubtitle =
-      'Building beautiful mobile experiences with Flutter';
+      'Flutter Developer | Team Lead | Building Production-Ready Apps';
   static const String heroDescription =
-      'Passionate Flutter Developer creating responsive, modern mobile applications';
+      'Leading teams to deliver scalable mobile applications published on Google Play Store & Apple App Store';
   static const String ctaButton = 'Get In Touch';
   static const String downloadCV = 'Download CV';
   static const String viewProjects = 'View Projects';
@@ -44,15 +45,15 @@ class AppStrings {
   static const String aboutTitle = 'About Me';
   static const String aboutSubtitle = 'Get to know me';
   static const String aboutDescription =
-      'I\'m Md. Johirul Islam, a passionate Flutter Developer specializing in building beautiful, responsive mobile applications. '
-      'With expertise in Flutter, Dart, Firebase, and modern state management solutions like GetX, I create seamless user experiences '
-      'that work flawlessly across iOS and Android platforms.';
+      'Results-driven Flutter Developer and Team Lead with proven experience in building, leading, and delivering production-grade mobile applications published on both Google Play Store and Apple App Store. '
+      'Strong expertise in Flutter architecture, state management (GetX, BLoC, Provider), API integration, and real-time systems (WebSockets, Socket.IO). '
+      'Adept at leading teams, owning application lifecycle, and shipping scalable, secure, and high-performance apps.';
   static const String aboutExtended =
-      'I believe in writing clean, maintainable code following industry best practices. '
-      'My goal is to build applications that not only look great but also provide exceptional performance and user satisfaction.';
+      'Currently serving as Team Lead at Softvency IT Limited, managing Flutter development teams and ensuring timely delivery of high-quality applications. '
+      'Recognized for turning complex requirements into clean, user-focused solutions with end-to-end responsibility including build, signing, versioning, store compliance, and release.';
   static const String yearsExperience = 'Years Experience';
-  static const String projectsCompleted = 'Projects Completed';
-  static const String happyClients = 'Happy Clients';
+  static const String projectsCompleted = 'Live Apps Published';
+  static const String happyClients = 'Production Apps';
 
   // Skills Section
   static const String skillsTitle = 'Technical Skills';
